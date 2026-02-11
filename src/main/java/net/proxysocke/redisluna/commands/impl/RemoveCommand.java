@@ -6,7 +6,7 @@ import net.proxysocke.redisluna.commands.CommandSender;
 import net.proxysocke.redisluna.session.ScriptSession;
 import net.proxysocke.redisluna.session.ScriptSessionManager;
 
-public class RemoveCommand implements CommandExecutor {
+public final class RemoveCommand implements CommandExecutor {
 
     private final App app;
 

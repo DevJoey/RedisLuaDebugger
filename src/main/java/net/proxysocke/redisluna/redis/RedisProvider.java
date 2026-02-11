@@ -1,14 +1,16 @@
 package net.proxysocke.redisluna.redis;
 
+import net.proxysocke.redisluna.config.sections.RedisCredentials;
+
 import redis.clients.jedis.*;
 
 import java.time.Duration;
 
-public class RedisProvider {
+public final class RedisProvider {
 
-    private RedisClient redisClient;
+    private final RedisClient redisClient;
 
-    public RedisProvider() {
+    public RedisProvider(RedisCredentials credentials) {
         ConnectionPoolConfig poolConfig = new ConnectionPoolConfig();
         poolConfig.setMaxTotal(5);
         poolConfig.setMaxIdle(3);
@@ -16,14 +18,14 @@ public class RedisProvider {
 
         JedisClientConfig clientConfig = DefaultJedisClientConfig.builder()
                 .clientName("RedisLuaDebugger")
-                .user("minecraft")
-                .password("test")
+                .user(credentials.username())
+                .password(credentials.password())
                 .build();
 
         redisClient = RedisClient.builder()
                 .poolConfig(poolConfig)
                 .clientConfig(clientConfig)
-                .hostAndPort("host", 6379)
+                .hostAndPort(credentials.host(), credentials.port())
                 .build();
     }
 

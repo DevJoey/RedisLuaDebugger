@@ -17,19 +17,19 @@ public final class ScriptSession {
         return scriptFilePath;
     }
 
-    public void setKeys(String... keys){
+    public void setKeys(String... keys) {
         this.keys = keys;
     }
 
-    public void setArgvs(String... argvs){
+    public void setArgvs(String... argvs) {
         this.argvs = argvs;
     }
 
     public String[] getKeys() {
-        return keys;
+        return keys == null ? new String[0] : keys;
     }
 
     public String[] getArgvs() {
-        return argvs;
+        return argvs == null ? new String[0] : argvs;
     }
 }

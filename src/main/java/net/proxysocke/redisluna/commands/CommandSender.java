@@ -2,7 +2,7 @@ package net.proxysocke.redisluna.commands;
 
 import org.jline.terminal.Terminal;
 
-public class CommandSender {
+public final class CommandSender {
 
     private final Terminal terminal;
 

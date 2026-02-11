@@ -8,10 +8,21 @@ public final class HelpCommand implements CommandExecutor {
     public void execute(CommandSender sender, String[] args) {
         sender.sendMessage("""
                 ################ Help ################
-                > create <SessionName> <ScriptName> - Creates a session
-                > remove <SessionName> - Removes a session
-                > keys <SessionName> <key1,key2...> - Sets the keys for a session
-                > argvs <SessionName> <arg1,arg2...> - Sets the argvs for a session
+                
+                Redis Lua-Script debugger v1.0.0 by Joey
+                
+                Commands:
+                ~ create <SessionName> <ScriptName> - Creates a session
+                ~ remove <SessionName> - Removes a session
+                ~ debug <SessionName> - Runs the session
+                ~ keys <SessionName> <key1,key2...> - Sets the keys for a session
+                ~ argvs <SessionName> <arg1,arg2...> - Sets the argvs for a session
+                
+                Placeholders:
+                You can use placeholders in keys and argvs.
+                ~ %uuid% - A random UUID
+                ~ %millis% - Current time in milliseconds
+                
                 ################ Help ################""");
     }
 }

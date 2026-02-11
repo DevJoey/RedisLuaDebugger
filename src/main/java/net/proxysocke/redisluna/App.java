@@ -4,6 +4,7 @@ import net.proxysocke.redisluna.commands.CommandExecutor;
 import net.proxysocke.redisluna.commands.CommandManager;
 import net.proxysocke.redisluna.commands.CommandSender;
 import net.proxysocke.redisluna.commands.impl.*;
+import net.proxysocke.redisluna.config.sections.RedisCredentials;
 import net.proxysocke.redisluna.session.ScriptSessionManager;
 import net.proxysocke.redisluna.config.RedisConfig;
 import net.proxysocke.redisluna.redis.RedisProvider;
@@ -22,13 +23,13 @@ import java.util.logging.Logger;
 public final class App {
 
     private final RedisConfig redisConfig = new RedisConfig();
-    private final CommandManager commandManager = new CommandManager();
-    private final RedisProvider redisProvider = new RedisProvider();
     private final ScriptSessionManager scriptSessionManager = new ScriptSessionManager();
+    private final CommandManager commandManager = new CommandManager();
 
-    private Logger logger;
     private Terminal terminal;
     private LineReader lineReader;
+    private Logger logger;
+    private RedisProvider redisProvider;
 
     public App() {
         setupFiles();
@@ -44,6 +45,13 @@ public final class App {
     }
 
     public void start() {
+        try {
+            redisProvider.connect();
+            logger.log(Level.INFO, "Successfully connected to redis.");
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Failed to connect to redis.", e);
+            return;
+        }
         try {
             while (true) {
                 String line = lineReader.readLine("> ");
@@ -73,7 +81,6 @@ public final class App {
     private void setupFiles() {
         try {
             redisConfig.load();
-            System.out.println(redisConfig.getProperties().getProperty("database"));
         } catch (IOException e) {
             System.out.println(e);
         }
@@ -95,28 +102,26 @@ public final class App {
             public void publish(LogRecord record) {
                 String message = String.format("[%s]: %s", record.getLevel(), record.getMessage());
                 terminal.writer().println(message);
+                Throwable thrown = record.getThrown();
+                if (thrown != null) {
+                    thrown.printStackTrace(terminal.writer());
+                }
                 terminal.flush();
             }
 
             @Override
-            public void flush() {
-            }
+            public void flush() {}
 
             @Override
-            public void close() {
-            }
+            public void close() {}
         };
         logger.setUseParentHandlers(false);
         logger.addHandler(handler);
     }
 
-    private void setupRedisProvider() {
-        try {
-            redisProvider.connect();
-            logger.log(Level.SEVERE, "Redis connection successful");
-        } catch (Exception e) {
-            logger.log(Level.SEVERE, "Redis connection failed", e);
-        }
+    private void setupRedisProvider(){
+        RedisCredentials credentials = redisConfig.getCredentials();
+        redisProvider = new RedisProvider(credentials);
     }
 
     public Terminal getTerminal() {
@@ -127,19 +132,19 @@ public final class App {
         return lineReader;
     }
 
-    public CommandManager getCommandManager() {
-        return commandManager;
-    }
-
-    public ScriptSessionManager getScriptSessionManager() {
-        return scriptSessionManager;
+    public Logger getLogger() {
+        return logger;
     }
 
     public RedisProvider getRedisProvider() {
         return redisProvider;
     }
 
-    public Logger getLogger() {
-        return logger;
+    public ScriptSessionManager getScriptSessionManager() {
+        return scriptSessionManager;
+    }
+
+    public CommandManager getCommandManager() {
+        return commandManager;
     }
 }

@@ -24,8 +24,8 @@ public final class ArgvsCommand implements CommandExecutor {
             sender.sendMessage(String.format("Failed to set argvs. Session '%s' not found.", args[0]));
             return;
         }
-        if(!args[1].matches("[a-zA-Z0-9]+")
-                && !args[1].matches("([a-zA-Z0-9]+,[a-zA-Z0-9]+)+")){
+        if(!args[1].matches("[\\w%]+")
+                && !args[1].matches("([\\w%]+,[\\w%]+)+")){
             sender.sendMessage("Invalid syntax for argvs: Args must be seperated by a comma. Example: arg1,arg2");
             return;
         }
