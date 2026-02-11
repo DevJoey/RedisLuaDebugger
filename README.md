@@ -19,7 +19,7 @@ komfortabel testen.
 - Löschen von Sessions
 - Terminalbasierte Bedienung (kein GUI)
 
-- ---
+---
 
 ## Funktionsweise
 
@@ -44,11 +44,11 @@ Verzeichnis befinden muss, wie die `.jar`
 **Beispielkonfiguration:**
 ```properties
 host=127.0.0.1
-port=
+port=6379
 database=0
 username=example_user
 password=example_password
 ```
 
-### Build
+## Build
 > Ich ergänze die Build-Informationen noch.
