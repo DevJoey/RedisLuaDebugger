@@ -17,13 +17,13 @@ public class RedisProvider {
         JedisClientConfig clientConfig = DefaultJedisClientConfig.builder()
                 .clientName("RedisLuaDebugger")
                 .user("minecraft")
-                .password("49245fa8f04954da833d7ee5800060111a80c85f6024c1271a7518aee677dd83")
+                .password("test")
                 .build();
 
         redisClient = RedisClient.builder()
                 .poolConfig(poolConfig)
                 .clientConfig(clientConfig)
-                .hostAndPort("91.218.67.149", 6379)
+                .hostAndPort("host", 6379)
                 .build();
     }
 

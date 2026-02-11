@@ -3,9 +3,9 @@ package net.proxysocke.redisluna.commands.impl;
 import net.proxysocke.redisluna.App;
 import net.proxysocke.redisluna.commands.CommandExecutor;
 import net.proxysocke.redisluna.commands.CommandSender;
-import net.proxysocke.redisluna.commands.session.ScriptSessionManager;
+import net.proxysocke.redisluna.session.ScriptSessionManager;
 
-public class CreateCommand implements CommandExecutor {
+public final class CreateCommand implements CommandExecutor {
 
     private final App app;
 

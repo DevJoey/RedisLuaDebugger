@@ -3,9 +3,8 @@ package net.proxysocke.redisluna;
 import net.proxysocke.redisluna.commands.CommandExecutor;
 import net.proxysocke.redisluna.commands.CommandManager;
 import net.proxysocke.redisluna.commands.CommandSender;
-import net.proxysocke.redisluna.commands.impl.CreateCommand;
-import net.proxysocke.redisluna.commands.impl.ScriptCommand;
-import net.proxysocke.redisluna.commands.session.ScriptSessionManager;
+import net.proxysocke.redisluna.commands.impl.*;
+import net.proxysocke.redisluna.session.ScriptSessionManager;
 import net.proxysocke.redisluna.config.RedisConfig;
 import net.proxysocke.redisluna.redis.RedisProvider;
 
@@ -14,7 +13,6 @@ import org.jline.reader.LineReaderBuilder;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -37,7 +35,12 @@ public final class App {
         setupTerminal();
         setupLogger();
         setupRedisProvider();
+        commandManager.registerCommand("help", new HelpCommand());
         commandManager.registerCommand("create", new CreateCommand(this));
+        commandManager.registerCommand("remove", new RemoveCommand(this));
+        commandManager.registerCommand("debug", new DebugCommand(this));
+        commandManager.registerCommand("keys", new KeysCommand(this));
+        commandManager.registerCommand("argvs", new ArgvsCommand(this));
     }
 
     public void start() {
