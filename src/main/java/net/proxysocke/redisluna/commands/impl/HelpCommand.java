@@ -23,6 +23,12 @@ public final class HelpCommand implements CommandExecutor {
                 ~ %uuid% - A random UUID
                 ~ %millis% - Current time in milliseconds
                 
+                Log-Channel:
+                You can send messages from your lua script
+                to the program.
+                
+                Use: 'redis.call("PUBLISH", "rl:logs", "Your message")'
+                
                 ################ Help ################""");
     }
 }

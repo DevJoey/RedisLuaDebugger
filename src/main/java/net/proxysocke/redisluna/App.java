@@ -5,6 +5,7 @@ import net.proxysocke.redisluna.commands.CommandManager;
 import net.proxysocke.redisluna.commands.CommandSender;
 import net.proxysocke.redisluna.commands.impl.*;
 import net.proxysocke.redisluna.config.sections.RedisCredentials;
+import net.proxysocke.redisluna.redis.PubSubHandler;
 import net.proxysocke.redisluna.session.ScriptSessionManager;
 import net.proxysocke.redisluna.config.RedisConfig;
 import net.proxysocke.redisluna.redis.RedisProvider;
@@ -15,10 +16,7 @@ import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
 
 import java.io.IOException;
-import java.util.logging.Handler;
-import java.util.logging.Level;
-import java.util.logging.LogRecord;
-import java.util.logging.Logger;
+import java.util.logging.*;
 
 public final class App {
 
@@ -30,6 +28,7 @@ public final class App {
     private LineReader lineReader;
     private Logger logger;
     private RedisProvider redisProvider;
+    private PubSubHandler pubSubHandler;
 
     public App() {
         setupFiles();
@@ -88,15 +87,20 @@ public final class App {
 
     private void setupTerminal() {
         try {
-            terminal = TerminalBuilder.builder().system(true).build();
-            lineReader = LineReaderBuilder.builder().terminal(terminal).build();
+            terminal = TerminalBuilder.builder()
+                    .system(true)
+                    .dumb(true)
+                    .build();
+            lineReader = LineReaderBuilder.builder()
+                    .terminal(terminal)
+                    .build();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     private void setupLogger() {
-        logger = Logger.getLogger("RedisLunaLogger");
+        logger = Logger.getLogger("net.proxysocke.redisluna");
         Handler handler = new Handler() {
             @Override
             public void publish(LogRecord record) {
@@ -122,6 +126,8 @@ public final class App {
     private void setupRedisProvider(){
         RedisCredentials credentials = redisConfig.getCredentials();
         redisProvider = new RedisProvider(credentials);
+        pubSubHandler = new PubSubHandler(this);
+        pubSubHandler.start();
     }
 
     public Terminal getTerminal() {
@@ -138,6 +144,10 @@ public final class App {
 
     public RedisProvider getRedisProvider() {
         return redisProvider;
+    }
+
+    public PubSubHandler getPubSubHandler() {
+        return pubSubHandler;
     }
 
     public ScriptSessionManager getScriptSessionManager() {
