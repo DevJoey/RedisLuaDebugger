@@ -25,7 +25,7 @@ public final class ArgvsCommand implements CommandExecutor {
             return;
         }
         if(!args[1].matches("[\\w%]+")
-                && !args[1].matches("([\\w%]+,[\\w%]+)+")){
+                && !args[1].matches("[\\w%]+(,[\\w%]+)+")){
             sender.sendMessage("Invalid syntax for argvs: Args must be seperated by a comma. Example: arg1,arg2");
             return;
         }

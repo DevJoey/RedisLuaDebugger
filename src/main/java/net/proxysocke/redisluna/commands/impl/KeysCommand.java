@@ -25,7 +25,7 @@ public final class KeysCommand implements CommandExecutor {
             return;
         }
         if(!args[1].matches("[\\w%]+")
-                && !args[1].matches("([\\w%]+,[\\w%]+)+")){
+                && !args[1].matches("[\\w%]+(,[\\w%]+)+")){
             sender.sendMessage("Invalid syntax for keys: Keys must be seperated by a comma. Example: key1,key2");
             return;
         }
