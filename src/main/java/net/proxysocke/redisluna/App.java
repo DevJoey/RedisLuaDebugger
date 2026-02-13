@@ -12,6 +12,7 @@ import net.proxysocke.redisluna.redis.RedisProvider;
 
 import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
+import org.jline.reader.impl.DefaultParser;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
 
@@ -36,6 +37,7 @@ public final class App {
         setupLogger();
         setupRedisProvider();
         commandManager.registerCommand("help", new HelpCommand());
+        commandManager.registerCommand("drop", new DropCommand(this));
         commandManager.registerCommand("create", new CreateCommand(this));
         commandManager.registerCommand("remove", new RemoveCommand(this));
         commandManager.registerCommand("debug", new DebugCommand(this));
@@ -91,8 +93,12 @@ public final class App {
                     .system(true)
                     .dumb(true)
                     .build();
+            // Parser damit Backslashes z. B. für pfade nicht entfernt werden.
+            DefaultParser parser = new DefaultParser();
+            parser.setEscapeChars(null);
             lineReader = LineReaderBuilder.builder()
                     .terminal(terminal)
+                    .parser(parser)
                     .build();
         } catch (IOException e) {
             e.printStackTrace();

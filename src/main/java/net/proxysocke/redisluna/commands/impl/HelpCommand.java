@@ -12,6 +12,7 @@ public final class HelpCommand implements CommandExecutor {
                 Redis Lua-Script debugger v1.0.0 by Joey
                 
                 Commands:
+                ~ drop - Deletes all created sessions
                 ~ create <SessionName> <ScriptName> - Creates a session
                 ~ remove <SessionName> - Removes a session
                 ~ debug <SessionName> - Runs the session

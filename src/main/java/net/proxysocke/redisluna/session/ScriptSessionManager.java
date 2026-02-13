@@ -11,18 +11,25 @@ public final class ScriptSessionManager {
 
     private ScriptSession lastSession;
 
-    public SessionCreateResult createSession(String sessionName, String scriptName) {
+    public SessionCreateResult createSession(String sessionName, String pathInput) {
         String sessionNameLower = sessionName.toLowerCase();
         if (sessions.containsKey(sessionNameLower)) {
             return SessionCreateResult.ALREADY_EXISTS;
         }
-        Path scriptFilePath = Path.of("scripts/", scriptName + ".lua");
-        if (Files.notExists(scriptFilePath)) {
+        Path scriptPath = Path.of(pathInput);
+        if(scriptPath.getNameCount() == 1){
+            scriptPath = Path.of("scripts/", pathInput + ".lua");
+        }
+        if (Files.notExists(scriptPath)) {
             return SessionCreateResult.SCRIPT_NOT_FOUND;
         }
-        ScriptSession session = new ScriptSession(scriptFilePath);
+        ScriptSession session = new ScriptSession(scriptPath);
         sessions.put(sessionNameLower, session);
         return SessionCreateResult.CREATED;
+    }
+
+    public void setLastSession(ScriptSession lastSession) {
+        this.lastSession = lastSession;
     }
 
     public ScriptSession getSession(String sessionName) {
@@ -37,8 +44,9 @@ public final class ScriptSessionManager {
         return sessions.remove(sessionName.toLowerCase());
     }
 
-    public void setLastSession(ScriptSession lastSession) {
-        this.lastSession = lastSession;
+    public void dropSessions(){
+        sessions.clear();
+        lastSession = null;
     }
 
     public enum SessionCreateResult {

@@ -20,6 +20,7 @@ public final class RedisProvider {
                 .clientName("RedisLuaDebugger")
                 .user(credentials.username())
                 .password(credentials.password())
+                .database(credentials.db())
                 .build();
 
         redisClient = RedisClient.builder()

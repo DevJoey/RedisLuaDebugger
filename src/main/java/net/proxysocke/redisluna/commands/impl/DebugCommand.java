@@ -7,6 +7,7 @@ import net.proxysocke.redisluna.session.ScriptSession;
 import net.proxysocke.redisluna.session.ScriptSessionManager;
 
 import redis.clients.jedis.RedisClient;
+import redis.clients.jedis.exceptions.JedisDataException;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -65,14 +66,14 @@ public final class DebugCommand implements CommandExecutor {
             sender.sendMessage(String.format("[Redis]: %s", redisResponse));
         } catch (IOException ioe) {
             app.getLogger().log(Level.SEVERE, String.format("Failed to load script: %s", scriptPath), ioe);
+        } catch (JedisDataException jde) {
+            app.getLogger().log(Level.SEVERE, String.format("Redis error on EVAL: %s", jde.getMessage()), jde);
         }
     }
 
     private String[] mergeArrays(String[] array1, String[] array2) {
         String[] merged = new String[array1.length + array2.length];
-        for (int i = 0; i < array1.length; i++) {
-            merged[i] = array1[i];
-        }
+        System.arraycopy(array1, 0, merged, 0, array1.length);
         int array2Start = array1.length;
         for (int i = 0; i < array2.length; i++) {
             merged[array2Start] = array2[i];
@@ -84,7 +85,7 @@ public final class DebugCommand implements CommandExecutor {
     private String[] parsePlaceholders(String[] array) {
         String[] parsed = new String[array.length];
         for (int i = 0; i < array.length; i++) {
-            String value = array[0].replace("%millis%", String.valueOf(System.currentTimeMillis()))
+            String value = array[i].replace("%millis%", String.valueOf(System.currentTimeMillis()))
                     .replace("%uuid%", UUID.randomUUID().toString());
             parsed[i] = value;
         }
